@@ -4,5 +4,22 @@
 
     <h1>{{article.title}}</h1>
     <h3>{{article.content}}</h3>
+    <hr>
+    <form action="{% url 'articles:comment_create' article_id=article.id%}" method="POST">
+        {%csrf_token%}
+        {{comment_form}}
+
+        <input type="submit">
+
+    </form>
+    {%if not article.comment_set.all|length %}
+        <p>댓글이 없습니다.</p>
+    {%endif%}
+    
+
+    {%for comment in article.comment_set.all %}
+        <p>{{comment.content}}</p>
+        <a href="{% url 'articles:delete_comment' article_id=article.id id=comment.id%}">X</a>
+    {%endfor%}
 
 {% endblock %}
